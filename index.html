@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="word-section"> </div>
+    <form action="">
+        <input id="input" type="text">
+        <button onclick="check();" type="button">Submit</button>
+    </form>
+    <div id="message"></div>
+    <script>
+        var words = ["pokemon", "charmander", "pikachu"];
+        var random = Math.floor(Math.random() * words.length);
+        var theWord = words[random];
+        var answerArray = [];
+        var alreadyGuessed = [];
+        for (var i = 0; i < theWord.length; i++) {
+            answerArray[i] = "_";
+        }
+        document.getElementById("word-section").textContent = answerArray.join(" ");
+
+        function inArray(needle, haystack) {
+            for (var i = 0; i < haystack.length; i++) {
+                if (haystack[i] == needle) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function setUpMessages(message, elementTarget) {
+            document.getElementById(elementTarget).textContent = message;
+        }
+
+        function removeMessage() {
+            document.getElementById("message").textContent = "";
+        }
+
+        function check() {
+            var guess = document.getElementById("input").value;
+            if (guess.length === 1) {
+                for (var i = 0; i < theWord.length; i++) {
+                    if (guess == theWord[i]) {
+                        answerArray[i] = guess;
+                        if (!inArray(guess, alreadyGuessed)) {
+                            alreadyGuessed.push(guess);
+                        }
+                        else {
+                            setUpMessages("Already Guessed That Letter", "message");
+                            setTimeout(removeMessage, 800)
+                        }
+                        if (answerArray.join("") == theWord) {
+                            setUpMessages("Hurry You Did It!", "message");
+                        }
+                    }
+                    document.getElementById("word-section").textContent = answerArray.join(" ");
+                }
+            }
+            else {
+                setUpMessages("Please Enter Only 1 letter", "message");
+                setTimeout(removeMessage, 3000)
+            }
+            document.getElementById("input").value = ""
+        }
+    </script>
+</body>
+
+</html>
